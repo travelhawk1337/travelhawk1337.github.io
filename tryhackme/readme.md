@@ -2,26 +2,32 @@
 
 ### Tasks
 
-1. Deploy the machine
+1. **Deploy the machine**
+
 - Just deploy the machine. 
 
-2. Reconnaissance
+2. **Reconnaissance**
+
 - How many ports are open?
+
 This task is quite easy, a default nmap scan would suffice.
 `nmap $IP`
 There are 2 ports open, port 22 and port 80. Port 22 is generally used for SSH and port 80 is used for HTTP Web Servers.
 
 - What version of Apache is running? 
+
 We can use nmap with -sV (it determines service/version info running on open ports) option. To make things faster we can also specify the ports 80 and 22 (using -p option).
 `nmap -sV -p 80, 22 $IP`
 Apache Version:- 2.4.29
 
 - What service is running on port 22?
+
 Service scan using nmap will tell us the service running on port 22 is SSH.
 
 - Find directories on the web server using the GoBuster tool.
 
 - What is the hidden directory?
+
 Gobuster is used to bruteforce hidden directories on web servers based on some wordlist. If you don't have a wordlist, you can download it [here](https://github.com/digination/dirbuster-ng/blob/master/wordlists/common.txt). Alternatively, download it directly from the terminal,
 ```bash 
 wget https://raw.githubusercontent.com/digination/dirbuster-ng/master/wordlists/common.txt
@@ -29,7 +35,8 @@ wget https://raw.githubusercontent.com/digination/dirbuster-ng/master/wordlists/
 `gobuster dir --url $IP --wordlist $WORDLIST_PATH`
 Gobuster finds some directories like `/panel/` and `/uploads/`. `/panel/` is the answer to the task.
 
-3. Getting a Shell
+3. **Getting a Shell**
+
 Now we have to find the user flag, it is in some file named user.txt (mentioned in task). 
 
 Going on the /panel endpoint, we find that we can upload files there. At this point, the first thing that hits the mind is that their must be a file upload vulnerability. So we uploaded a file with .php extension and the website refuses to accept the file. So we tried changing the extension to .png.php, .php3, .phtml. Changing the extension to .phtml bypasses the security check and our file is uploaded. (File with .php3 extension is also uploaded but it is not executed on the web server).
@@ -53,7 +60,7 @@ find / -name user.txt 2>/dev/null
 ```
 The flag:- `THM{y0u_g0t_a_sh3ll}`
 
-4. Privilege escalation
+4. **Privilege escalation**
 
 - Search for files with SUID permission, which file is weird?
 We can find files with suid permission using the find command:-
@@ -71,5 +78,6 @@ python -c 'import os; os.execl("/bin/sh", "sh", "-p")'
 This gives us the root shell. Going to the root home directory we find the flag in root.txt.
 
 - root.txt
+
 The flag:- `THM{pr1v1l3g3_3sc4l4t10n}`
 
