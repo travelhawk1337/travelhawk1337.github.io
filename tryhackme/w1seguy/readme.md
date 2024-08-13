@@ -38,5 +38,5 @@
 
     - **What is the second and final flag?**
 
-        Answer: `THM{THM{BrUt3_ForC1nG_XOR_cAn_B3_FuN_nO?}`
+        Answer: `THM{BrUt3_ForC1nG_XOR_cAn_B3_FuN_nO?}`
 
